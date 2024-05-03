@@ -1,0 +1,54 @@
+<!-- products.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <!-- Intégrez votre fichier CSS ici si nécessaire -->
+</head>
+<body>
+    <button class="shopping">Open Shopping</button>
+    <div class="shoppingCart">
+        <button class="closeShopping">Close</button>
+        <h2>Shopping Cart</h2>
+        <ul class="listCard"></ul>
+        <div>Total: $<span class="total"></span></div>
+        <div>Quantity: <span class="quantity"></span></div>
+    </div>
+    <div class="list"></div>
+
+    <script>
+        // Votre code JavaScript ici
+        let openShopping = document.querySelector('.shopping');
+        let closeShopping = document.querySelector('.closeShopping');
+        let list = document.querySelector('.list');
+        let listCard = document.querySelector('.listCard');
+        let body = document.querySelector('body');
+        let total = document.querySelector('.total');
+        let quantity = document.querySelector('.quantity');
+
+// Remplacez la fonction initApp par celle-ci pour récupérer les produits depuis l'API Django
+async function initApp() {
+    const response = await fetch('/api/products/');
+    const products = await response.json();
+    products.forEach((value, key) =>{
+        let newDiv = document.createElement('div');
+        newDiv.classList.add('item');
+        newDiv.innerHTML = `
+            <img src="${value.image}">
+            <div class="title">${value.name}</div>
+            <div class="price">${value.price.toLocaleString()}</div>
+            <button onclick="addToCard(${value.id})">Add To Card</button>`;
+        list.appendChild(newDiv);
+    });
+}
+
+// Mettez à jour la fonction addToCard pour interagir avec l'API Django
+async function addToCard(productId) {
+    const response = await fetch(`/api/products/${productId}/`);
+    const product = await response.json();
+    // Ajoutez le produit au panier comme vous le faisiez précédemment
+}    </script>
+</body>
+</html>
